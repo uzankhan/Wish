@@ -162,7 +162,7 @@
 @keyframes drift { 0%{transform:translate3d(0,-12vh,0) rotate(0)} 100%{transform:translate3d(12vw,112vh,0) rotate(480deg)} }
 @keyframes rise { 0%{transform:translate3d(0,12vh,0) scale(.7);opacity:0} 15%{opacity:.75} 100%{transform:translate3d(-5vw,-115vh,0) scale(1.2);opacity:0} }
 @keyframes floaty { 50%{transform:translateY(-10px) rotate(2deg)} }
-@keyframes glow { 50%{filter:drop-shadow(0 0 18px color-mix(in oklab,var(--primary) 50%,transparent));transform:scale(1.025)} }
+@keyframes glow { 50%{filter:drop-shadow(0 0 18px color-mix(in oklab,var(--primary) 50%,transparent))} }
 @keyframes shoot { 0%,85%{transform:translate3d(-30vw,-15vh,0);opacity:0} 88%{opacity:1} 100%{transform:translate3d(130vw,45vh,0);opacity:0} }
 @keyframes popin { from{opacity:0;transform:translateY(24px) scale(.94)} to{opacity:1;transform:none} }
 @keyframes flame { 50%{transform:scale(.8) rotate(5deg)} }
