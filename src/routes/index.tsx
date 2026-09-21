@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, Gift, Heart, Music2, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import floralWreath from "../assets/romantic-floral-wreath.png";
 
@@ -38,9 +38,9 @@ function BirthdaySurprise() {
   const toggleMusic=()=>{if(!playing){sound([261.63,329.63,392,523.25]);timer.current=window.setInterval(()=>sound([261.63,329.63,392,523.25]),4300);setPlaying(true)}else{if(timer.current)window.clearInterval(timer.current);setPlaying(false)}};
   const celebrate=()=>{setConfetti(Array.from({length:55},(_,i)=>Date.now()+i));sound([523,659,784,1047]);setTimeout(()=>setConfetti([]),3000)};
   const go=(n:number)=>{setChapter(Math.max(0,Math.min(7,n)));sound([440,587]);};
-  return <main onClick={(e)=>{const el=e.target as HTMLElement;const r=document.createElement("i");r.className="cursor-heart";r.textContent="✨";r.style.left=`${e.clientX}px`;r.style.top=`${e.clientY}px`;document.body.appendChild(r);setTimeout(()=>r.remove(),800)}} className="dream-bg relative h-[100dvh] overflow-hidden text-foreground selection:bg-primary/20">
+  return <main onClick={(e)=>{const r=document.createElement("i");r.className="cursor-heart";r.textContent="✨";r.style.left=`${e.clientX}px`;r.style.top=`${e.clientY}px`;document.body.appendChild(r);setTimeout(()=>r.remove(),800)}} className="dream-bg relative h-[100dvh] overflow-hidden text-foreground selection:bg-primary/20">
     <MagicSky />
-    {confetti.map((id,i)=><i key={id} className="confetti-piece h-3 w-2 rounded-sm bg-gold" style={{left:`${(i*37)%100}%`,`--dx`:`${(i%2?1:-1)*(20+i%50)}px`,animationDelay:`${(i%9)*.04}s`} as React.CSSProperties}/>)}
+    {confetti.map((id,i)=><i key={id} className="confetti-piece h-3 w-2 rounded-sm bg-gold" style={{left:`${(i*37)%100}%`,"--dx":`${(i%2?1:-1)*(20+i%50)}px`,animationDelay:`${(i%9)*.04}s`} as CSSProperties}/>)}
     {chapter>0&&<header className="fixed inset-x-0 top-0 z-50 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-3 sm:p-5">
       <button aria-label="Previous chapter" onClick={()=>go(chapter-1)} className="grid size-10 place-items-center rounded-full border border-border bg-paper/80 text-primary backdrop-blur"><ArrowLeft size={18}/></button>
       <div className="mx-auto flex max-w-xl items-center gap-1.5" aria-label={`Chapter ${chapter+1} of 8`}>
