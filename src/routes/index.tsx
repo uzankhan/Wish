@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, Gift, Heart, Music2, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, ArrowRight, CakeSlice, Gift, Heart, Music2, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import floralWreath from "../assets/romantic-floral-wreath.png";
 
 export const Route = createFileRoute("/")({
@@ -22,6 +22,12 @@ const memories = [
 ];
 const reasons = ["Your smile makes every day brighter.","You understand my silences.","You make ordinary moments magical.","Your laugh is my favourite sound.","You are endlessly kind.","You believe in me.","You make me feel at home.","Every memory is better with you.","You are beautifully, wonderfully you.","Simply: you are my Januu. ♥"];
 const jarMemories = ["The first time you made me forget what I was saying.","That laugh I could listen to forever.","The little conversations that became my favourite memories.","Every time a simple hello made my whole day."];
+const wishFireworks = [
+  [15,21,0],[78,17,.25],[50,30,.8],[29,52,1.45],[88,47,1.8],
+  [13,39,2.45],[67,59,2.9],[43,13,3.5],[92,24,4.1],[22,72,4.65],
+  [73,34,5.3],[38,43,5.9],[56,69,6.5],[9,17,7.2],[83,62,7.9],
+] as const;
+const wishColors = ["firework-rose","firework-gold","firework-pearl","firework-pink"];
 
 function MagicButton({ children, onClick, type="button", disabled=false, className="" }: { children:ReactNode;onClick?:()=>void;type?:"button"|"submit";disabled?:boolean;className?:string }) {
   return <button type={type} disabled={disabled} onClick={onClick} className={`magic-button inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground transition disabled:cursor-not-allowed disabled:opacity-40 ${className}`}>{children}</button>;
@@ -50,7 +56,7 @@ function BirthdaySurprise() {
     <section className="scrollbar-soft relative z-10 h-full overflow-y-auto px-4 pb-24 pt-16 sm:px-8">
       {chapter===0&&<Welcome countdown={countdown} onStart={()=>{toggleMusic();go(1)}}/>}
       {chapter===1&&<Lock onUnlock={()=>{setUnlocked(true);celebrate();setTimeout(()=>go(2),1900)}}/>}
-      {chapter===2&&<Wish onNext={()=>go(3)}/>} {chapter===3&&<Cake celebrate={celebrate} onNext={()=>go(4)}/>} {chapter===4&&<MemoryLane onNext={()=>go(5)}/>} {chapter===5&&<FunZone onNext={()=>go(6)} celebrate={celebrate}/>} {chapter===6&&<Letter onNext={()=>go(7)}/>} {chapter===7&&<Finale celebrate={celebrate} onReplay={()=>{setUnlocked(false);setChapter(0)}}/>}
+      {chapter===2&&<Wish onNext={()=>go(3)} chime={()=>sound([783.99,1046.5,1318.51,1567.98])}/>} {chapter===3&&<Cake celebrate={celebrate} onNext={()=>go(4)}/>} {chapter===4&&<MemoryLane onNext={()=>go(5)}/>} {chapter===5&&<FunZone onNext={()=>go(6)} celebrate={celebrate}/>} {chapter===6&&<Letter onNext={()=>go(7)}/>} {chapter===7&&<Finale celebrate={celebrate} onReplay={()=>{setUnlocked(false);setChapter(0)}}/>}
     </section>
     <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border bg-paper/85 p-2 shadow-lg backdrop-blur">
       <button aria-label={playing?"Pause music":"Play music"} onClick={toggleMusic} className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground">{playing?<Pause size={16}/>:<Play size={16}/>}</button>
@@ -68,7 +74,46 @@ function Welcome({countdown,onStart}:{countdown:string;onStart:()=>void}){const 
 
 function Lock({onUnlock}:{onUnlock:()=>void}){const [value,setValue]=useState("");const [error,setError]=useState(false);const [success,setSuccess]=useState(false);const submit=(e:FormEvent)=>{e.preventDefault();if(value==="for-you-i-will"){setSuccess(true);setError(false);onUnlock()}else{setError(true);setValue("");setTimeout(()=>setError(false),1200)}};return <div className="chapter flex min-h-[calc(100dvh-6rem)] items-center"><Frame className={`text-center ${error?"shake":""}`}><div className="floaty mx-auto mb-5 grid size-24 place-items-center rounded-full bg-rose-soft text-5xl shadow-xl">{success?"♥":"♥"}</div><h2 className="script text-5xl font-bold text-primary">{success?"Welcome, My Januu! ✦":"Only for My Januu"}</h2><p className="mt-3 text-sm text-muted-foreground">Enter the secret code to unlock your surprise…</p><form onSubmit={submit} className="mx-auto mt-8 max-w-sm"><label className="sr-only" htmlFor="secret">Secret code</label><input id="secret" autoFocus type="password" value={value} onChange={e=>{setValue(e.target.value);setError(false)}} className="w-full rounded-full border border-border bg-background/70 px-5 py-3 text-center outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Our secret code"/><MagicButton type="submit" className="mt-4 w-full">Unlock ♥</MagicButton>{error&&<p role="alert" className="mt-4 text-sm font-medium text-primary">Oops! That's not you  Try again, My Januu!</p>}</form></Frame></div>}
 
-function Wish({onNext}:{onNext:()=>void}){const text="You are my best friend, my crush, my everything. Today is your day, and I just want to see you smile. Without you, everything feels incomplete. You are the reason my world feels brighter. — Yours forever, Uzan Khan ♥";const [shown,setShown]=useState("");useEffect(()=>{let i=0;const id=setInterval(()=>{i++;setShown(text.slice(0,i));if(i>=text.length)clearInterval(id)},24);return()=>clearInterval(id)},[]);return <div className="chapter flex min-h-[calc(100dvh-6rem)] items-center"><Frame className="relative overflow-hidden text-center"><span className="text-5xl">♡</span><h2 className="script mt-4 text-5xl font-bold text-primary sm:text-6xl">Happy Birthday, My Januu!</h2><p className="quote mx-auto mt-7 min-h-40 max-w-2xl text-lg leading-8 italic sm:min-h-32 sm:text-xl">{shown}<span className="animate-pulse text-primary">|</span></p><div className="my-5 text-3xl tracking-[.35em]">♡ ♥ ✦ ✦ ❀</div><MagicButton onClick={onNext}>Make a wish <ArrowRight size={18}/></MagicButton></Frame></div>}
+function Wish({onNext,chime}:{onNext:()=>void;chime:()=>void}){
+  const text="You are my best friend, my crush, my everything. Today is your day, and I just want to see you smile. Without you, everything feels incomplete. You are the reason my world feels brighter. — Yours forever, Uzan Khan 💗";
+  const [shown,setShown]=useState("");
+  const chimeRef=useRef(chime);
+  chimeRef.current=chime;
+  useEffect(()=>{
+    let i=0;
+    const typing=window.setInterval(()=>{i++;setShown(text.slice(0,i));if(i>=text.length)window.clearInterval(typing)},34);
+    const first=window.setTimeout(()=>chimeRef.current(),300);
+    const ringing=window.setInterval(()=>chimeRef.current(),2200);
+    const stop=window.setTimeout(()=>window.clearInterval(ringing),8800);
+    return()=>{window.clearInterval(typing);window.clearTimeout(first);window.clearInterval(ringing);window.clearTimeout(stop)};
+  },[]);
+  return <div className="wish-scene chapter relative isolate flex min-h-[calc(100dvh-6rem)] items-center justify-center py-10 text-center">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <div className="wish-halo absolute inset-0"/>
+      {Array.from({length:24},(_,i)=><i key={`b${i}`} className="wish-bokeh absolute rounded-full" style={{left:`${(i*43+7)%100}%`,top:`${(i*31+12)%88}%`,width:`${7+i%5*5}px`,height:`${7+i%5*5}px`,animationDelay:`-${i*.61}s`,animationDuration:`${3+i%4}s`}}/>)}
+      {wishFireworks.map(([x,y,delay],i)=><div key={`f${i}`} className={`wish-firework absolute ${wishColors[i%wishColors.length]}`} style={{left:`${x}%`,top:`${y}%`,animationDelay:`${delay}s`}}>
+        <i className="wish-flash" style={{animationDelay:`${delay}s`}}/>
+        {Array.from({length:16},(_,j)=>{const angle=j*Math.PI/8;return <i key={j} className="wish-spark" style={{"--spark-x":`${Math.cos(angle)*(48+i%3*16)}px`,"--spark-y":`${Math.sin(angle)*(48+i%3*16)}px`,animationDelay:`${delay}s`} as CSSProperties}/>})}
+      </div>)}
+      {Array.from({length:40},(_,i)=><i key={`p${i}`} className={`wish-petal ${i%2?"wish-petal-up":"wish-petal-down"}`} style={{left:`${(i*37+4)%100}%`,animationDelay:`-${(i*1.17)%9}s`,animationDuration:`${6+i%5}s`,"--petal-sway":`${(i%2?1:-1)*(28+i%4*17)}px`} as CSSProperties}/>)}
+      {Array.from({length:38},(_,i)=><i key={`c${i}`} className={`wish-cannon absolute ${i%2?"wish-cannon-right":"wish-cannon-left"} ${wishColors[i%4]}`} style={{"--cannon-x":`${(i%2?-1:1)*(85+i%9*28)}px`,"--cannon-y":`${-125-i%7*42}px`,animationDelay:`${(i%19)*.12}s`} as CSSProperties}/>)}
+      {Array.from({length:18},(_,i)=><span key={`h${i}`} className="wish-heart absolute text-primary" style={{left:`${(i*29+9)%96}%`,animationDelay:`-${i*.67}s`,animationDuration:`${5+i%4}s`}}>♥</span>)}
+      {Array.from({length:32},(_,i)=><span key={`g${i}`} className="wish-glitter absolute text-gold" style={{left:`${(i*47+3)%98}%`,top:`${(i*37+9)%96}%`,animationDelay:`-${i*.23}s`}}>✦</span>)}
+    </div>
+    <div className="relative z-10 mx-auto w-full max-w-4xl px-2">
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[.25em] text-primary sm:text-sm">October 1 · the world celebrates you</p>
+      <div className="wish-title-wrap relative mx-auto max-w-3xl">
+        <span aria-hidden="true" className="wish-crown script block text-4xl text-gold sm:text-5xl">✦ ♥ ✦</span>
+        <h2 className="wish-title script relative mx-auto mt-2 text-[clamp(2.8rem,9vw,6.5rem)] font-bold leading-[1.04] text-primary">Happy Birthday,<br/>My Januu! <CakeSlice aria-label="birthday cake" className="inline-block size-[.65em] align-baseline text-gold" strokeWidth={1.6}/></h2>
+      </div>
+      <div className="mx-auto mt-7 max-w-2xl border-y border-primary/20 bg-paper/65 px-4 py-5 shadow-lg backdrop-blur-sm sm:mt-9 sm:px-10 sm:py-7">
+        <p className="quote min-h-40 text-base leading-8 italic text-foreground sm:min-h-32 sm:text-xl">{shown}<span aria-hidden="true" className="animate-pulse text-primary">|</span></p>
+      </div>
+      <div aria-hidden="true" className="mt-5 text-xl text-primary">✦ &nbsp; ♡ &nbsp; ✦</div>
+      <MagicButton onClick={onNext} className="mt-4">Make a wish <ArrowRight size={18}/></MagicButton>
+    </div>
+  </div>;
+}
 
 function Cake({celebrate,onNext}:{celebrate:()=>void;onNext:()=>void}){const [candles,setCandles]=useState([true,true,true]);const [cut,setCut]=useState(false);const blow=(i:number)=>{const next=candles.map((v,j)=>j===i?false:v);setCandles(next);if(next.every(v=>!v))celebrate()};const ready=candles.every(v=>!v);return <div className="chapter flex min-h-[calc(100dvh-6rem)] items-center"><div className="mx-auto w-full max-w-4xl text-center"><p className="text-xs font-semibold uppercase tracking-[.2em] text-muted-foreground">The sweetest chapter</p><h2 className="script text-5xl font-bold text-primary">Make a wish, My Januu</h2><p className="mt-2 text-sm text-muted-foreground">{ready?cut?"The first slice is yours! cake":"Now cut the cake! ":"Tap each candle to blow it out "}</p><div className="relative mx-auto mt-12 h-72 w-72 sm:h-80 sm:w-96"><div className="absolute left-1/2 top-0 flex -translate-x-1/2 gap-10">{candles.map((lit,i)=><button key={i} aria-label={`Blow out candle ${i+1}`} disabled={!lit} onClick={()=>blow(i)} className="relative h-24 w-6"><i className={`flame absolute left-1/2 top-0 h-7 w-4 -translate-x-1/2 rounded-[50%_50%_45%_45%] bg-gold transition ${lit?"opacity-100":"opacity-0"}`}/><i className="absolute bottom-0 left-1/2 h-16 w-3 -translate-x-1/2 rounded bg-primary/45"/></button>)}</div><button aria-label="Cut the birthday cake" disabled={!ready||cut} onClick={()=>{setCut(true);celebrate()}} className="absolute inset-x-0 bottom-0 mx-auto h-48 w-72 transition enabled:hover:scale-105"><span className="absolute bottom-1 left-1/2 h-24 w-64 -translate-x-1/2 rounded-lg border-4 border-paper bg-rose-soft shadow-xl"/><span className={`absolute bottom-20 left-1/2 h-20 w-48 -translate-x-1/2 rounded-lg border-4 border-paper bg-rose-soft transition duration-700 ${cut?"translate-x-4 rotate-3":""}`}/><span className="script absolute bottom-11 left-1/2 z-10 w-56 -translate-x-1/2 text-xl font-bold text-primary">Happy Birthday<br/>My Januu</span></button></div>{ready&&!cut&&<MagicButton onClick={()=>{setCut(true);celebrate()}}>Cut the cake </MagicButton>}{cut&&<div className="animate-fade-in"><p className="quote mb-4 text-xl italic text-primary">Wish granted! The first slice is yours, My Januu! cake</p><MagicButton onClick={onNext}>Memory lane <ArrowRight size={18}/></MagicButton></div>}</div></div>}
 
