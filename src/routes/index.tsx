@@ -23,9 +23,10 @@ const memories = [
 const reasons = ["Your smile makes every day brighter.","You understand my silences.","You make ordinary moments magical.","Your laugh is my favourite sound.","You are endlessly kind.","You believe in me.","You make me feel at home.","Every memory is better with you.","You are beautifully, wonderfully you.","Simply: you are my Januu. ♥"];
 const jarMemories = ["The first time you made me forget what I was saying.","That laugh I could listen to forever.","The little conversations that became my favourite memories.","Every time a simple hello made my whole day."];
 const wishFireworks = [
-  [15,21,0],[78,17,.25],[50,30,.8],[29,52,1.45],[88,47,1.8],
-  [13,39,2.45],[67,59,2.9],[43,13,3.5],[92,24,4.1],[22,72,4.65],
-  [73,34,5.3],[38,43,5.9],[56,69,6.5],[9,17,7.2],[83,62,7.9],
+  [15,21,0],[78,17,.15],[50,30,.35],[29,52,1.1],[88,47,1.3],[64,12,1.45],
+  [13,39,2.15],[67,59,2.3],[43,13,2.6],[92,24,3.35],[22,72,3.55],[74,43,3.75],
+  [73,34,4.55],[38,43,4.7],[56,69,4.9],[9,17,5.7],[83,62,5.9],[47,26,6.1],
+  [26,32,6.95],[69,16,7.1],[58,56,7.35],[12,67,8.05],[87,30,8.2],[39,19,8.35],
 ] as const;
 const wishColors = ["firework-rose","firework-gold","firework-pearl","firework-pink"];
 
@@ -107,7 +108,7 @@ function Wish({onNext,chime}:{onNext:()=>void;chime:()=>void}){
         <h2 className="wish-title script relative mx-auto mt-2 text-[clamp(2.8rem,9vw,6.5rem)] font-bold leading-[1.04] text-primary">Happy Birthday,<br/>My Januu! <CakeSlice aria-label="birthday cake" className="inline-block size-[.65em] align-baseline text-gold" strokeWidth={1.6}/></h2>
       </div>
       <div className="mx-auto mt-7 max-w-2xl border-y border-primary/20 bg-paper/65 px-4 py-5 shadow-lg backdrop-blur-sm sm:mt-9 sm:px-10 sm:py-7">
-        <p className="quote min-h-40 text-base leading-8 italic text-foreground sm:min-h-32 sm:text-xl">{shown}<span aria-hidden="true" className="animate-pulse text-primary">|</span></p>
+        <p className="quote min-h-40 text-base leading-8 italic text-foreground sm:min-h-32 sm:text-xl">{shown.replace("💗", "")} {shown.includes("💗")&&<Heart className="inline-block size-5 fill-primary align-middle text-primary" aria-label="pink heart"/>}<span aria-hidden="true" className="animate-pulse text-primary">|</span></p>
       </div>
       <div aria-hidden="true" className="mt-5 text-xl text-primary">✦ &nbsp; ♡ &nbsp; ✦</div>
       <MagicButton onClick={onNext} className="mt-4">Make a wish <ArrowRight size={18}/></MagicButton>
