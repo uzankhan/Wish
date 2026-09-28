@@ -157,6 +157,17 @@
   --color-lavender: var(--lavender);
   --color-gold: var(--gold);
   --color-paper: var(--paper);
+  --color-firework-rose: var(--firework-rose);
+  --color-firework-gold: var(--firework-gold);
+  --color-firework-pearl: var(--firework-pearl);
+  --color-firework-pink: var(--firework-pink);
+}
+
+:root {
+  --firework-rose: oklch(0.63 0.22 355);
+  --firework-gold: oklch(0.82 0.15 87);
+  --firework-pearl: oklch(0.98 0.015 85);
+  --firework-pink: oklch(0.78 0.16 345);
 }
 
 @keyframes drift { 0%{transform:translate3d(0,-12vh,0) rotate(0)} 100%{transform:translate3d(12vw,112vh,0) rotate(480deg)} }
@@ -185,4 +196,35 @@
 .confetti-piece { position:fixed;top:-12px;animation:confetti 2.8s linear forwards;z-index:80; }
 .cursor-heart { position:fixed;pointer-events:none;animation:cursorFade .8s ease-out forwards;z-index:90; }
 .scrollbar-soft::-webkit-scrollbar{width:6px}.scrollbar-soft::-webkit-scrollbar-thumb{background:var(--rose-soft);border-radius:10px}
+/* The birthday reveal is its own full-viewport stage, with transform/opacity-only particles. */
+.wish-scene::before { content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 35%,var(--paper) 0%,var(--rose-soft) 53%,var(--lavender) 100%); }
+.wish-halo { background:radial-gradient(ellipse at center,color-mix(in oklab,var(--gold) 23%,transparent),transparent 55%);animation:wishBreath 4s ease-in-out infinite alternate; }
+.wish-title { text-shadow:0 0 16px color-mix(in oklab,var(--firework-pearl) 90%,transparent),0 0 36px color-mix(in oklab,var(--primary) 50%,transparent),0 0 70px color-mix(in oklab,var(--gold) 80%,transparent);animation:wishTitlePulse 2.7s ease-in-out infinite; }
+.wish-crown {filter:drop-shadow(0 0 12px var(--gold));animation:wishBreath 3s ease-in-out infinite alternate;}
+.wish-bokeh {background:var(--gold);box-shadow:0 0 22px 9px color-mix(in oklab,var(--gold) 42%,transparent);opacity:.35;animation:wishBokeh ease-in-out infinite alternate;}
+.wish-firework {width:1px;height:1px;z-index:1;filter:drop-shadow(0 0 5px currentColor);}
+.firework-rose {color:var(--firework-rose);background-color:var(--firework-rose)}
+.firework-gold {color:var(--firework-gold);background-color:var(--firework-gold)}
+.firework-pearl {color:var(--firework-pearl);background-color:var(--firework-pearl)}
+.firework-pink {color:var(--firework-pink);background-color:var(--firework-pink)}
+.wish-spark {position:absolute;left:0;top:0;width:4px;height:12px;border-radius:50%;background:currentColor;box-shadow:0 0 8px 3px currentColor;opacity:0;animation:wishBurst 1.35s cubic-bezier(.16,.7,.4,1) both;will-change:transform,opacity;}
+.wish-flash {position:absolute;left:-17px;top:-17px;width:35px;height:35px;border-radius:50%;background:currentColor;box-shadow:0 0 45px 18px currentColor;opacity:0;animation:wishFlash .65s ease-out both;}
+.wish-petal {position:absolute;width:12px;height:19px;border-radius:80% 8% 70% 8%;background:var(--firework-pink);box-shadow:inset 3px 3px 5px color-mix(in oklab,var(--firework-rose) 55%,transparent);opacity:.75;will-change:transform;}
+.wish-petal-down {top:-25px;animation:wishPetalDown linear infinite;}
+.wish-petal-up {bottom:-25px;animation:wishPetalUp linear infinite;}
+.wish-cannon {bottom:5%;width:7px;height:13px;opacity:0;animation:wishCannon 2.5s cubic-bezier(.12,.5,.6,1) both;will-change:transform,opacity;}
+.wish-cannon-left {left:0;transform-origin:bottom left;}
+.wish-cannon-right {right:0;transform-origin:bottom right;}
+.wish-heart {bottom:-30px;opacity:0;animation:rise linear infinite;will-change:transform;}
+.wish-glitter {animation:wishTwinkle 2s ease-in-out infinite alternate;filter:drop-shadow(0 0 6px var(--gold));}
+@keyframes wishBurst {0%{opacity:0;transform:translate3d(0,0,0) scale(.1)}10%{opacity:1}65%{opacity:1}100%{opacity:0;transform:translate3d(var(--spark-x),var(--spark-y),0) scale(.4)}}
+@keyframes wishFlash {0%{opacity:0;transform:scale(.1)}20%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(2.2)}}
+@keyframes wishPetalDown {from{transform:translate3d(0,-5vh,0) rotate(0)}to{transform:translate3d(var(--petal-sway),110vh,0) rotate(540deg)}}
+@keyframes wishPetalUp {from{transform:translate3d(0,5vh,0) rotate(0)}to{transform:translate3d(var(--petal-sway),-110vh,0) rotate(-480deg)}}
+@keyframes wishCannon {0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:1}50%{opacity:1;transform:translate3d(var(--cannon-x),var(--cannon-y),0) rotate(360deg)}100%{opacity:0;transform:translate3d(calc(var(--cannon-x) * 2),60vh,0) rotate(800deg)}}
+@keyframes wishBokeh {from{opacity:.16;transform:scale(.7)}to{opacity:.42;transform:scale(1.3)}}
+@keyframes wishBreath {from{opacity:.55;transform:scale(.96)}to{opacity:1;transform:scale(1.04)}}
+@keyframes wishTitlePulse {50%{filter:brightness(1.2);transform:scale(1.025)}}
+@keyframes wishTwinkle {from{opacity:.15;transform:scale(.65) rotate(0)}to{opacity:.95;transform:scale(1.25) rotate(45deg)}}
+@media (max-width:640px){.wish-spark:nth-of-type(even){display:none}.wish-glitter:nth-of-type(3n){display:none}.wish-petal:nth-of-type(3n){display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
