@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, CakeSlice, Gift, Heart, Music2, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import floralWreath from "../assets/romantic-floral-wreath.png";
+import chocolateCake from "../assets/chocolate-cake.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -44,6 +45,8 @@ function BirthdaySurprise() {
   const sound=(notes=[523.25,659.25,783.99])=>{try{const ctx=audio.current??new AudioContext();audio.current=ctx;notes.forEach((n,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=n;g.gain.setValueAtTime(volume*.18,ctx.currentTime+i*.1);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.1+.35);o.connect(g).connect(ctx.destination);o.start(ctx.currentTime+i*.1);o.stop(ctx.currentTime+i*.1+.36)})}catch{return}};
   const toggleMusic=()=>{if(!playing){sound([261.63,329.63,392,523.25]);timer.current=window.setInterval(()=>sound([261.63,329.63,392,523.25]),4300);setPlaying(true)}else{if(timer.current)window.clearInterval(timer.current);setPlaying(false)}};
   const celebrate=()=>{setConfetti(Array.from({length:55},(_,i)=>Date.now()+i));sound([523,659,784,1047]);setTimeout(()=>setConfetti([]),3000)};
+  const tune=()=>{try{const ctx=audio.current??new AudioContext();audio.current=ctx;const r=(n:number)=>261.63*Math.pow(2,n/12);const m:[number,number][]=[[7,.3],[7,.15],[9,.5],[7,.5],[12,.5],[11,1],[7,.3],[7,.15],[9,.5],[7,.5],[14,.5],[12,1],[7,.3],[7,.15],[19,.5],[16,.5],[12,.5],[11,.5],[9,1],[17,.3],[17,.15],[16,.5],[12,.5],[14,.5],[12,1.2]];let t=ctx.currentTime+.05;const v=Math.max(volume,.12)*.9;m.forEach(([n,d])=>{[1,2].forEach(h=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=h===1?"triangle":"sine";o.frequency.value=r(n)*h;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v/h,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+d*.95);o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+d)});t+=d*.9})}catch{return}};
+  const soften=(on:boolean)=>setVolume(v=>on?(v>0?Math.min(v,.05):0):(v>0?.18:0));
   const go=(n:number)=>{setChapter(Math.max(0,Math.min(7,n)));sound([440,587]);};
   return <main onClick={(e)=>{const r=document.createElement("i");r.className="cursor-heart";r.textContent="✦";r.style.left=`${e.clientX}px`;r.style.top=`${e.clientY}px`;document.body.appendChild(r);setTimeout(()=>r.remove(),800)}} className="dream-bg relative h-[100dvh] overflow-hidden text-foreground selection:bg-primary/20">
     <MagicSky />
@@ -57,7 +60,7 @@ function BirthdaySurprise() {
     <section className="scrollbar-soft relative z-10 h-full overflow-y-auto px-4 pb-24 pt-16 sm:px-8">
       {chapter===0&&<Welcome countdown={countdown} onStart={()=>{toggleMusic();go(1)}}/>}
       {chapter===1&&<Lock onUnlock={()=>{setUnlocked(true);celebrate();setTimeout(()=>go(2),1900)}}/>}
-      {chapter===2&&<Wish onNext={()=>go(3)} chime={()=>sound([783.99,1046.5,1318.51,1567.98])}/>} {chapter===3&&<Cake celebrate={celebrate} onNext={()=>go(4)}/>} {chapter===4&&<MemoryLane onNext={()=>go(5)}/>} {chapter===5&&<FunZone onNext={()=>go(6)} celebrate={celebrate}/>} {chapter===6&&<Letter onNext={()=>go(7)}/>} {chapter===7&&<Finale celebrate={celebrate} onReplay={()=>{setUnlocked(false);setChapter(0)}}/>}
+      {chapter===2&&<Wish onNext={()=>go(3)} chime={()=>sound([783.99,1046.5,1318.51,1567.98])}/>} {chapter===3&&<Cake celebrate={celebrate} chime={()=>sound([783.99,1046.5,1318.51,1567.98])} tune={tune} soften={soften} onNext={()=>go(4)}/>} {chapter===4&&<MemoryLane onNext={()=>go(5)}/>} {chapter===5&&<FunZone onNext={()=>go(6)} celebrate={celebrate}/>} {chapter===6&&<Letter onNext={()=>go(7)}/>} {chapter===7&&<Finale celebrate={celebrate} onReplay={()=>{setUnlocked(false);setChapter(0)}}/>}
     </section>
     <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border bg-paper/85 p-2 shadow-lg backdrop-blur">
       <button aria-label={playing?"Pause music":"Play music"} onClick={toggleMusic} className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground">{playing?<Pause size={16}/>:<Play size={16}/>}</button>
@@ -116,7 +119,55 @@ function Wish({onNext,chime}:{onNext:()=>void;chime:()=>void}){
   </div>;
 }
 
-function Cake({celebrate,onNext}:{celebrate:()=>void;onNext:()=>void}){const [candles,setCandles]=useState([true,true,true]);const [cut,setCut]=useState(false);const blow=(i:number)=>{const next=candles.map((v,j)=>j===i?false:v);setCandles(next);if(next.every(v=>!v))celebrate()};const ready=candles.every(v=>!v);return <div className="chapter flex min-h-[calc(100dvh-6rem)] items-center"><div className="mx-auto w-full max-w-4xl text-center"><p className="text-xs font-semibold uppercase tracking-[.2em] text-muted-foreground">The sweetest chapter</p><h2 className="script text-5xl font-bold text-primary">Make a wish, My Januu</h2><p className="mt-2 text-sm text-muted-foreground">{ready?cut?"The first slice is yours! cake":"Now cut the cake! ":"Tap each candle to blow it out "}</p><div className="relative mx-auto mt-12 h-72 w-72 sm:h-80 sm:w-96"><div className="absolute left-1/2 top-0 flex -translate-x-1/2 gap-10">{candles.map((lit,i)=><button key={i} aria-label={`Blow out candle ${i+1}`} disabled={!lit} onClick={()=>blow(i)} className="relative h-24 w-6"><i className={`flame absolute left-1/2 top-0 h-7 w-4 -translate-x-1/2 rounded-[50%_50%_45%_45%] bg-gold transition ${lit?"opacity-100":"opacity-0"}`}/><i className="absolute bottom-0 left-1/2 h-16 w-3 -translate-x-1/2 rounded bg-primary/45"/></button>)}</div><button aria-label="Cut the birthday cake" disabled={!ready||cut} onClick={()=>{setCut(true);celebrate()}} className="absolute inset-x-0 bottom-0 mx-auto h-48 w-72 transition enabled:hover:scale-105"><span className="absolute bottom-1 left-1/2 h-24 w-64 -translate-x-1/2 rounded-lg border-4 border-paper bg-rose-soft shadow-xl"/><span className={`absolute bottom-20 left-1/2 h-20 w-48 -translate-x-1/2 rounded-lg border-4 border-paper bg-rose-soft transition duration-700 ${cut?"translate-x-4 rotate-3":""}`}/><span className="script absolute bottom-11 left-1/2 z-10 w-56 -translate-x-1/2 text-xl font-bold text-primary">Happy Birthday<br/>My Januu</span></button></div>{ready&&!cut&&<MagicButton onClick={()=>{setCut(true);celebrate()}}>Cut the cake </MagicButton>}{cut&&<div className="animate-fade-in"><p className="quote mb-4 text-xl italic text-primary">Wish granted! The first slice is yours, My Januu! cake</p><MagicButton onClick={onNext}>Memory lane <ArrowRight size={18}/></MagicButton></div>}</div></div>}
+const balloonColors=["var(--firework-pink)","var(--gold)","var(--paper)","var(--lavender)"];
+function Cake({celebrate,chime,tune,soften,onNext}:{celebrate:()=>void;chime:()=>void;tune:()=>void;soften:(on:boolean)=>void;onNext:()=>void}){
+  type Phase="intro"|"pause"|"blow"|"granted"|"cut"|"reveal";
+  const [phase,setPhase]=useState<Phase>("intro");const [candles,setCandles]=useState([true,true,true]);
+  const timers=useRef<number[]>([]);const later=(f:()=>void,ms:number)=>{timers.current.push(window.setTimeout(f,ms))};
+  useEffect(()=>()=>{timers.current.forEach(clearTimeout);soften(false)},[]);// eslint-disable-line react-hooks/exhaustive-deps
+  const startPause=()=>{setPhase("pause");soften(true);chime();later(()=>setPhase("blow"),2600)};
+  const blow=(i:number)=>{if(phase!=="blow")return;const next=candles.map((v,j)=>j===i?false:v);setCandles(next);chime();if(next.every(v=>!v)){later(()=>{setPhase("granted");soften(false)},600)}};
+  const cut=()=>{setPhase("cut");celebrate();tune();later(celebrate,1600);later(celebrate,3400);later(()=>setPhase("reveal"),6500)};
+  const partying=phase==="cut"||phase==="reveal";
+  const msg=phase==="intro"?"Ready for the sweetest moment?":phase==="blow"?"Tap each candle to blow it out ♥":phase==="granted"?"Now take the knife and cut the cake":"";
+  return <div className="chapter relative isolate flex min-h-[calc(100dvh-6rem)] items-center py-8">
+    {partying&&<div aria-hidden="true" className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
+      {wishFireworks.map(([x,y,d],i)=><div key={`f${i}`} className={`wish-firework absolute ${wishColors[i%4]}`} style={{left:`${x}%`,top:`${y}%`,animationDelay:`${d*.8}s`}}><i className="wish-flash" style={{animationDelay:`${d*.8}s`}}/>{Array.from({length:14},(_,j)=>{const a=j*Math.PI/7;return <i key={j} className="wish-spark" style={{"--spark-x":`${Math.cos(a)*(50+i%3*18)}px`,"--spark-y":`${Math.sin(a)*(50+i%3*18)}px`,animationDelay:`${d*.8}s`} as CSSProperties}/>})}</div>)}
+      {Array.from({length:44},(_,i)=><i key={`c${i}`} className={`wish-cannon absolute ${i%2?"wish-cannon-right":"wish-cannon-left"} ${wishColors[i%4]}`} style={{"--cannon-x":`${(i%2?-1:1)*(90+i%9*30)}px`,"--cannon-y":`${-140-i%7*45}px`,animationDelay:`${(i%22)*.08}s`} as CSSProperties}/>)}
+      {Array.from({length:36},(_,i)=><i key={`p${i}`} className={`wish-petal ${i%2?"wish-petal-up":"wish-petal-down"}`} style={{left:`${(i*37+4)%100}%`,animationDelay:`-${(i*1.17)%9}s`,animationDuration:`${6+i%5}s`,"--petal-sway":`${(i%2?1:-1)*(28+i%4*17)}px`} as CSSProperties}/>)}
+      {Array.from({length:26},(_,i)=><span key={`b${i}`} className="cake-balloon" style={{left:`${(i*41+3)%96}%`,background:balloonColors[i%4],animationDelay:`${(i%13)*.35}s`,animationDuration:`${6+i%4}s`,"--sway":`${(i%2?1:-1)*(20+i%5*8)}px`} as CSSProperties}/>)}
+    </div>}
+    {phase==="pause"&&<div className="cake-pause fixed inset-0 z-30 grid place-items-center px-6 text-center"><p className="script text-4xl font-bold text-paper drop-shadow-lg sm:text-6xl">Wait… close your eyes<br/>and make a wish first <Heart className="inline size-[.7em] fill-paper"/></p></div>}
+    <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
+      <p className="text-xs font-semibold uppercase tracking-[.2em] text-muted-foreground">The sweetest chapter</p>
+      <h2 className="script text-5xl font-bold text-primary">Your Birthday Cake</h2>
+      {phase==="granted"&&<p className="script mt-2 animate-scale-in text-4xl font-bold text-gold drop-shadow">Wish granted! ✦</p>}
+      <p className="mt-2 min-h-5 text-sm text-muted-foreground">{msg}</p>
+      <div className={`cake-stage relative mx-auto mt-4 aspect-square w-[min(88vw,440px)] ${phase==="pause"?"cake-frozen":""}`}>
+        <div className="cake-shadow absolute inset-x-[18%] bottom-[2%] h-[6%] rounded-full"/>
+        <img src={chocolateCake} alt="Realistic two-tier chocolate cake with ganache drips, strawberries, cherries, lilies and roses, reading Happy Birthday My Januu" width={1024} height={1024} className={`cake-half cake-left absolute inset-0 size-full ${partying?"cake-cut":""}`}/>
+        <img src={chocolateCake} alt="" aria-hidden="true" width={1024} height={1024} className={`cake-half cake-right absolute inset-0 size-full ${partying?"cake-cut":""}`}/>
+        {!partying&&<div className="absolute left-[39%] top-[3%] flex w-[26%] justify-between">{candles.map((lit,i)=><button key={i} aria-label={`Blow out candle ${i+1}`} disabled={!lit||phase!=="blow"} onClick={()=>blow(i)} className="relative h-[5.5rem] w-7 sm:h-24">
+          {lit?<i className="flame cake-flame absolute left-1/2 top-0 h-7 w-4 -translate-x-1/2"/>:<><i className="cake-smoke"/><i className="cake-smoke" style={{animationDelay:".3s"}}/></>}
+          <i className="cake-candle absolute bottom-0 left-1/2 h-[70%] w-3 -translate-x-1/2 rounded-sm"/>
+        </button>)}</div>}
+        {phase==="granted"&&Array.from({length:10},(_,i)=><span key={i} className="wish-glitter absolute text-gold" style={{left:`${20+(i*37)%60}%`,top:`${(i*23)%40}%`,animationDelay:`-${i*.2}s`}}>✦</span>)}
+        {phase==="granted"&&<button onClick={cut} aria-label="Cut the cake with the knife" className="cake-knife absolute right-[4%] top-[18%] z-10 text-5xl sm:text-6xl">🔪</button>}
+      </div>
+      {phase==="intro"&&<MagicButton onClick={startPause}>Cut the cake ✦</MagicButton>}
+      {phase==="granted"&&<MagicButton onClick={cut}>Tap the knife to cut</MagicButton>}
+      {phase==="cut"&&<p className="script animate-fade-in text-5xl font-bold text-primary">Happy Birthday! ♥</p>}
+      {phase==="reveal"&&<div className="relative mx-auto mt-2 max-w-xl animate-scale-in">
+        {Array.from({length:12},(_,i)=><span key={i} aria-hidden="true" className="wish-heart absolute text-primary" style={{left:`${(i*29+5)%95}%`,bottom:0,animationDelay:`-${i*.5}s`,animationDuration:`${4+i%3}s`}}>♥</span>)}
+        <div className="cake-card relative rounded-2xl border border-gold/50 bg-paper/85 px-6 py-7 backdrop-blur-md">
+          <p className="script text-3xl font-bold text-primary sm:text-4xl">Your gift is with me, My Januu <Gift className="inline size-7 text-gold"/> ✦</p>
+          <p className="quote mt-4 text-lg italic leading-8 text-foreground">To get it, you'll have to come to me…<br/>And send me your picture in my favourite pose <Heart className="inline size-5 fill-primary text-primary"/> <span className="cake-wink inline-block">😉</span></p>
+        </div>
+        <MagicButton onClick={onNext} className="mt-5">Continue <ArrowRight size={18}/></MagicButton>
+      </div>}
+    </div>
+  </div>;
+}
 
 function MemoryLane({onNext}:{onNext:()=>void}){const [reason,setReason]=useState(-1);const [memory,setMemory]=useState("");return <div className="chapter mx-auto max-w-6xl py-8 text-center"><h2 className="script text-5xl font-bold text-primary">Our Beautiful Memories ♥</h2><p className="mt-2 text-sm text-muted-foreground">Every little moment with you belongs here.</p><div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{memories.map(([icon,caption],i)=><article key={caption} className={`rounded-sm bg-paper p-3 pb-6 shadow-xl transition hover:-translate-y-2 hover:rotate-0 ${i%2?"rotate-2":"-rotate-2"}`}><div className="grid aspect-[4/5] place-items-center bg-gradient-to-br from-rose-soft to-lavender text-7xl">{icon}</div><p className="script mt-4 text-xl text-primary">{caption}</p></article>)}</div><p className="quote mt-10 text-xl italic">And many more memories to make… ♥</p><div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2"><button onClick={()=>setReason((reason+1)%reasons.length)} className="rounded-lg border border-border bg-paper/70 p-5 text-left transition hover:-translate-y-1"><span className="text-xs uppercase tracking-widest text-muted-foreground">Reason {reason+2} of 10</span><strong className="mt-2 block text-primary">{reason<0?"Tap to reveal why I love you":reasons[reason]??"You make everything better."}</strong></button><button onClick={()=>setMemory(jarMemories[Math.floor(Math.random()*jarMemories.length)]??jarMemories[0]??"")} className="rounded-lg border border-border bg-paper/70 p-5 text-left transition hover:-translate-y-1"><span className="text-xs uppercase tracking-widest text-muted-foreground">Memory jar </span><strong className="mt-2 block text-primary">{memory||"Pull out a tiny memory"}</strong></button></div><MagicButton onClick={onNext} className="mt-8">Let’s play <ArrowRight size={18}/></MagicButton></div>}
 

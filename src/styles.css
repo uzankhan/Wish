@@ -228,3 +228,22 @@
 @keyframes wishTwinkle {from{opacity:.15;transform:scale(.65) rotate(0)}to{opacity:.95;transform:scale(1.25) rotate(45deg)}}
 @media (max-width:640px){.wish-spark:nth-of-type(even){display:none}.wish-glitter:nth-of-type(3n){display:none}.wish-petal:nth-of-type(3n){display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+/* Cake scene */
+.cake-pause{background:color-mix(in oklab,var(--foreground) 55%,transparent);backdrop-filter:blur(3px);animation:fade-in .6s ease-out both;}
+.cake-frozen{filter:saturate(.6) brightness(.8);transition:filter .6s;}
+.cake-shadow{background:radial-gradient(color-mix(in oklab,var(--foreground) 35%,transparent),transparent 70%);filter:blur(4px);}
+.cake-half{object-fit:contain;filter:drop-shadow(0 18px 24px color-mix(in oklab,var(--foreground) 30%,transparent));transition:transform 1.1s cubic-bezier(.2,.8,.2,1);}
+.cake-left{clip-path:inset(0 50% 0 0);} .cake-right{clip-path:inset(0 0 0 50%);}
+.cake-left.cake-cut{transform:translateX(-5%) rotate(-2deg);} .cake-right.cake-cut{transform:translateX(5%) rotate(2deg);}
+.cake-candle{background:repeating-linear-gradient(135deg,var(--paper) 0 6px,var(--firework-pink) 6px 11px);box-shadow:inset -2px 0 3px color-mix(in oklab,var(--foreground) 20%,transparent);}
+.cake-flame{background:radial-gradient(ellipse at 50% 70%,var(--paper) 0 20%,var(--gold) 45%,var(--firework-rose) 90%);border-radius:50% 50% 45% 45%/60% 60% 40% 40%;filter:drop-shadow(0 0 10px var(--gold));}
+.cake-smoke{position:absolute;left:50%;top:10%;width:10px;height:10px;border-radius:50%;background:color-mix(in oklab,var(--muted-foreground) 50%,transparent);filter:blur(3px);animation:cakeSmoke 2s ease-out forwards;}
+@keyframes cakeSmoke{from{transform:translate(-50%,0) scale(.6);opacity:.8}to{transform:translate(-20%,-60px) scale(2.4);opacity:0}}
+.cake-knife{animation:cakeKnife 1.4s ease-in-out infinite;filter:drop-shadow(0 4px 6px color-mix(in oklab,var(--foreground) 30%,transparent));}
+@keyframes cakeKnife{0%,100%{transform:rotate(-20deg) translateY(0)}50%{transform:rotate(-8deg) translateY(-8px)}}
+.cake-balloon{position:absolute;bottom:-90px;width:46px;height:58px;border-radius:50% 50% 48% 48%/55% 55% 45% 45%;box-shadow:inset -6px -8px 12px color-mix(in oklab,var(--foreground) 15%,transparent),inset 6px 6px 10px color-mix(in oklab,var(--paper) 70%,transparent);animation:cakeBalloon linear both;will-change:transform;}
+.cake-balloon::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:50px;background:color-mix(in oklab,var(--foreground) 30%,transparent);}
+@keyframes cakeBalloon{from{transform:translate(0,0)}50%{transform:translate(var(--sway),-60vh)}to{transform:translate(0,-125vh)}}
+.cake-card{box-shadow:0 0 30px color-mix(in oklab,var(--gold) 45%,transparent),0 0 70px color-mix(in oklab,var(--primary) 30%,transparent);animation:glow 2.6s ease-in-out infinite;}
+.cake-wink{animation:floaty 2s ease-in-out infinite;}
