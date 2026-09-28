@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the wish celebration scoped to the Wish chapter using CSS transform/opacity particles and the existing shared audio context; this preserves smooth animation and avoids autoplay or cross-chapter effects.
