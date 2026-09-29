@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, CakeSlice, Gift, Heart, Music2, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { Proposal } from "../components/Proposal";
 import floralWreath from "../assets/romantic-floral-wreath.png";
 import chocolateCake from "../assets/chocolate-cake.png";
 
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/")({
   component: BirthdaySurprise,
 });
 
-const chapterNames = ["Welcome", "Secret", "Wish", "Cake", "Memories", "Fun", "Letter", "Forever"];
+const chapterNames = ["Welcome", "Secret", "Wish", "Cake", "Forever?", "Memories", "Fun", "Letter", "Always"];
 const memories = [
   ["🌅", "Remember this day?"], ["💬", "Our first conversation…"],
   ["😂", "This was so funny!"], ["💞", "Forever my favourite memory"],
@@ -47,20 +48,20 @@ function BirthdaySurprise() {
   const celebrate=()=>{setConfetti(Array.from({length:55},(_,i)=>Date.now()+i));sound([523,659,784,1047]);setTimeout(()=>setConfetti([]),3000)};
   const tune=()=>{try{const ctx=audio.current??new AudioContext();audio.current=ctx;const r=(n:number)=>261.63*Math.pow(2,n/12);const m:[number,number][]=[[7,.3],[7,.15],[9,.5],[7,.5],[12,.5],[11,1],[7,.3],[7,.15],[9,.5],[7,.5],[14,.5],[12,1],[7,.3],[7,.15],[19,.5],[16,.5],[12,.5],[11,.5],[9,1],[17,.3],[17,.15],[16,.5],[12,.5],[14,.5],[12,1.2]];let t=ctx.currentTime+.05;const v=Math.max(volume,.12)*.9;m.forEach(([n,d])=>{[1,2].forEach(h=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=h===1?"triangle":"sine";o.frequency.value=r(n)*h;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v/h,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+d*.95);o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+d)});t+=d*.9})}catch{return}};
   const soften=(on:boolean)=>setVolume(v=>on?(v>0?Math.min(v,.05):0):(v>0?.18:0));
-  const go=(n:number)=>{setChapter(Math.max(0,Math.min(7,n)));sound([440,587]);};
+  const go=(n:number)=>{setChapter(Math.max(0,Math.min(8,n)));sound([440,587]);};
   return <main onClick={(e)=>{const r=document.createElement("i");r.className="cursor-heart";r.textContent="✦";r.style.left=`${e.clientX}px`;r.style.top=`${e.clientY}px`;document.body.appendChild(r);setTimeout(()=>r.remove(),800)}} className="dream-bg relative h-[100dvh] overflow-hidden text-foreground selection:bg-primary/20">
     <MagicSky />
     {confetti.map((id,i)=><i key={id} className="confetti-piece h-3 w-2 rounded-sm bg-gold" style={{left:`${(i*37)%100}%`,"--dx":`${(i%2?1:-1)*(20+i%50)}px`,animationDelay:`${(i%9)*.04}s`} as CSSProperties}/>)}
     {chapter>0&&<header className="fixed inset-x-0 top-0 z-50 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-3 sm:p-5">
       <button aria-label="Previous chapter" onClick={()=>go(chapter-1)} className="grid size-10 place-items-center rounded-full border border-border bg-paper/80 text-primary backdrop-blur"><ArrowLeft size={18}/></button>
-      <div className="mx-auto flex max-w-xl items-center gap-1.5" aria-label={`Chapter ${chapter+1} of 8`}>
+      <div className="mx-auto flex max-w-xl items-center gap-1.5" aria-label={`Chapter ${chapter+1} of 9`}>
         {chapterNames.map((n,i)=><button key={n} aria-label={n} onClick={()=>unlocked&&go(i)} className={`grid size-6 place-items-center text-xs transition sm:size-8 ${i<=chapter?"text-primary":"text-muted-foreground/40"}`}>{i<=chapter?"♥":"♡"}</button>)}
       </div><span className="hidden text-xs font-medium text-muted-foreground sm:block">{chapterNames[chapter]}</span>
     </header>}
     <section className="scrollbar-soft relative z-10 h-full overflow-y-auto px-4 pb-24 pt-16 sm:px-8">
       {chapter===0&&<Welcome countdown={countdown} onStart={()=>{toggleMusic();go(1)}}/>}
       {chapter===1&&<Lock onUnlock={()=>{setUnlocked(true);celebrate();setTimeout(()=>go(2),1900)}}/>}
-      {chapter===2&&<Wish onNext={()=>go(3)} chime={()=>sound([783.99,1046.5,1318.51,1567.98])}/>} {chapter===3&&<Cake celebrate={celebrate} chime={()=>sound([783.99,1046.5,1318.51,1567.98])} tune={tune} soften={soften} onNext={()=>go(4)}/>} {chapter===4&&<MemoryLane onNext={()=>go(5)}/>} {chapter===5&&<FunZone onNext={()=>go(6)} celebrate={celebrate}/>} {chapter===6&&<Letter onNext={()=>go(7)}/>} {chapter===7&&<Finale celebrate={celebrate} onReplay={()=>{setUnlocked(false);setChapter(0)}}/>}
+      {chapter===2&&<Wish onNext={()=>go(3)} chime={()=>sound([783.99,1046.5,1318.51,1567.98])}/>} {chapter===3&&<Cake celebrate={celebrate} chime={()=>sound([783.99,1046.5,1318.51,1567.98])} tune={tune} soften={soften} onNext={()=>go(4)}/>} {chapter===4&&<Proposal celebrate={celebrate} chime={()=>sound([783.99,1046.5,1318.51,1567.98])} onNext={()=>go(5)}/>} {chapter===5&&<MemoryLane onNext={()=>go(6)}/>} {chapter===6&&<FunZone onNext={()=>go(7)} celebrate={celebrate}/>} {chapter===7&&<Letter onNext={()=>go(8)}/>} {chapter===8&&<Finale celebrate={celebrate} onReplay={()=>{setUnlocked(false);setChapter(0)}}/>}
     </section>
     <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border bg-paper/85 p-2 shadow-lg backdrop-blur">
       <button aria-label={playing?"Pause music":"Play music"} onClick={toggleMusic} className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground">{playing?<Pause size={16}/>:<Play size={16}/>}</button>

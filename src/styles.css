@@ -247,3 +247,15 @@
 @keyframes cakeBalloon{from{transform:translate(0,0)}50%{transform:translate(var(--sway),-60vh)}to{transform:translate(0,-125vh)}}
 .cake-card{box-shadow:0 0 30px color-mix(in oklab,var(--gold) 45%,transparent),0 0 70px color-mix(in oklab,var(--primary) 30%,transparent);animation:glow 2.6s ease-in-out infinite;}
 .cake-wink{animation:floaty 2s ease-in-out infinite;}
+
+/* Wedding card */
+:root{--wedding-maroon:oklch(0.38 0.12 20);--wedding-cream:oklch(0.97 0.03 85);}
+@theme inline{--color-wedding-maroon:var(--wedding-maroon);}
+.wedding-card{background:linear-gradient(135deg,var(--gold),var(--firework-pearl) 30%,var(--gold) 55%,var(--firework-pearl) 80%,var(--gold));box-shadow:0 0 40px color-mix(in oklab,var(--gold) 55%,transparent),0 0 90px color-mix(in oklab,var(--primary) 25%,transparent);animation:weddingIn 1.3s cubic-bezier(.2,.9,.2,1) both,glow 3s ease-in-out 1.3s infinite;}
+.wedding-inner{background:radial-gradient(circle at 50% 0,var(--rose-soft),transparent 45%),var(--wedding-cream);outline:1px solid var(--gold);outline-offset:-10px;}
+.wedding-gold{color:oklch(0.62 0.13 75);text-shadow:0 1px 0 color-mix(in oklab,var(--paper) 80%,transparent);}
+.wedding-rule{height:1px;margin:1.1rem auto;width:80%;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.wedding-shimmer{position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 35%,color-mix(in oklab,var(--firework-pearl) 70%,transparent) 50%,transparent 65%);transform:translateX(-100%);animation:weddingShimmer 3.5s ease-in-out 1.4s infinite;}
+.wedding-seal{background:radial-gradient(circle at 35% 30%,oklch(0.55 0.15 20),var(--wedding-maroon));color:var(--gold);box-shadow:0 4px 12px color-mix(in oklab,var(--wedding-maroon) 45%,transparent);}
+@keyframes weddingIn{from{opacity:0;transform:translateY(-60px) scale(.92) rotateX(25deg)}to{opacity:1;transform:none}}
+@keyframes weddingShimmer{to{transform:translateX(100%)}}
