@@ -50,7 +50,7 @@ export default function Finale({ celebrate, chime, swell, fadeOut, onReplay }: P
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         {Array.from({ length: small ? 30 : 60 }, (_, i) => <i key={`s${i}`} className="finale-star absolute rounded-full" style={{ left: `${(i * 53) % 100}%`, top: `${(i * 29) % 70}%`, width: i % 5 ? 2 : 3, height: i % 5 ? 2 : 3, animationDelay: `${(i % 10) * .3}s` }} />)}
         {[0, 1, 2].map(i => <i key={`sh${i}`} className="shooting-star absolute h-px w-24 finale-shoot" style={{ top: `${8 + i * 14}%`, left: 0, animationDelay: `${i * 3.3}s` }} />)}
-        {[[15, 22], [82, 18], [50, 12], [30, 38], [72, 40]].slice(0, small ? 3 : 5).map(([x, y], i) => <Firework key={`f${i}`} x={x} y={y} delay={i * .9} color={fwColors[i % 4]} repeat />)}
+        {([[15, 22], [82, 18], [50, 12], [30, 38], [72, 40]] as [number, number][]).slice(0, small ? 3 : 5).map(([x, y], i) => <Firework key={`f${i}`} x={x} y={y} delay={i * .9} color={fwColors[i % 4]!} repeat />)}
         {Array.from({ length: small ? 10 : 20 }, (_, i) => <i key={`p${i}`} className="wish-petal wish-petal-down" style={{ left: `${(i * 37) % 100}%`, animationDuration: `${11 + (i % 5) * 2}s`, animationDelay: `${-(i * 1.3)}s`, "--petal-sway": `${(i % 2 ? 1 : -1) * (30 + i * 4)}px` } as CSSProperties} />)}
         {Array.from({ length: small ? 8 : 16 }, (_, i) => <Heart key={`h${i}`} className="wish-heart absolute fill-current text-primary/70" size={12 + (i % 4) * 5} style={{ left: `${(i * 61) % 100}%`, animationDuration: `${8 + (i % 5)}s`, animationDelay: `${i * .7}s` }} />)}
       </div>
@@ -59,8 +59,8 @@ export default function Finale({ celebrate, chime, swell, fadeOut, onReplay }: P
       {active && <div aria-hidden className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
         {Array.from({ length: heartCount }, (_, i) => <Heart key={`bh${i}`} className="finale-fall absolute fill-current" size={14 + (i % 5) * 6} style={{ color: heartColors[i % heartColors.length], left: `${(i * 41) % 100}%`, animationDuration: `${3 + (i % 5) * .6}s`, animationDelay: `${(i * 8.5 / heartCount).toFixed(2)}s` }} />)}
         {Array.from({ length: small ? 14 : 28 }, (_, i) => <i key={`bp${i}`} className="wish-petal wish-petal-down" style={{ left: `${(i * 29) % 100}%`, animationDuration: `${4 + (i % 4)}s`, animationDelay: `${(i % 12) * .6}s`, "--petal-sway": `${(i % 2 ? 1 : -1) * 60}px` } as CSSProperties} />)}
-        {Array.from({ length: small ? 20 : 40 }, (_, i) => <i key={`c${i}`} className={`wish-cannon absolute ${i % 2 ? "wish-cannon-right" : "wish-cannon-left"} ${fwColors[i % 4]}`} style={{ animationDelay: `${(i % 10) * .25 + Math.floor(i / 20) * 3}s`, "--cannon-x": `${(i % 2 ? -1 : 1) * (20 + (i % 7) * 6)}vw`, "--cannon-y": `${-(35 + (i % 5) * 9)}vh` } as CSSProperties} />)}
-        {Array.from({ length: small ? 6 : 10 }, (_, i) => <Firework key={`bf${i}`} x={10 + (i * 37) % 80} y={10 + (i * 23) % 50} delay={i * .8} color={fwColors[i % 4]} />)}
+        {Array.from({ length: small ? 20 : 40 }, (_, i) => <i key={`c${i}`} className={`wish-cannon absolute ${i % 2 ? "wish-cannon-right" : "wish-cannon-left"} ${fwColors[i % 4]!}`} style={{ animationDelay: `${(i % 10) * .25 + Math.floor(i / 20) * 3}s`, "--cannon-x": `${(i % 2 ? -1 : 1) * (20 + (i % 7) * 6)}vw`, "--cannon-y": `${-(35 + (i % 5) * 9)}vh` } as CSSProperties} />)}
+        {Array.from({ length: small ? 6 : 10 }, (_, i) => <Firework key={`bf${i}`} x={10 + (i * 37) % 80} y={10 + (i * 23) % 50} delay={i * .8} color={fwColors[i % 4]!} />)}
         {Array.from({ length: small ? 16 : 30 }, (_, i) => <span key={`g${i}`} className="wish-glitter absolute text-gold" style={{ left: `${(i * 47) % 100}%`, top: `${(i * 31) % 100}%`, animationDelay: `${(i % 8) * .25}s` }}>✦</span>)}
       </div>}
 
