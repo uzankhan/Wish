@@ -76,7 +76,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "A Special Surprise for My Januu" },
       { name: "description", content: "A private birthday surprise made with love by Uzan Khan." },
       { name: "author", content: "Uzan Khan" },

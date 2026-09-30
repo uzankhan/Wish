@@ -259,3 +259,31 @@
 .wedding-seal{background:radial-gradient(circle at 35% 30%,oklch(0.55 0.15 20),var(--wedding-maroon));color:var(--gold);box-shadow:0 4px 12px color-mix(in oklab,var(--wedding-maroon) 45%,transparent);}
 @keyframes weddingIn{from{opacity:0;transform:translateY(-60px) scale(.92) rotateX(25deg)}to{opacity:1;transform:none}}
 @keyframes weddingShimmer{to{transform:translateX(100%)}}
+
+/* Finale */
+.finale-scene::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 110%,var(--rose-soft) 0%,oklch(0.55 0.12 320) 45%,oklch(0.28 0.08 295) 100%);}
+.finale-scene{color:var(--paper);}
+.finale-scene .text-muted-foreground{color:var(--muted-foreground);}
+.finale-star{background:var(--firework-pearl);box-shadow:0 0 6px var(--firework-pearl);animation:wishTwinkle 2.4s ease-in-out infinite alternate;}
+.finale-shoot{background:linear-gradient(90deg,transparent,var(--firework-pearl));}
+.finale-message{color:var(--foreground);box-shadow:0 0 30px color-mix(in oklab,var(--gold) 45%,transparent);animation:glow 3s ease-in-out infinite;}
+.finale-fall{top:-50px;animation:finaleFall linear both;will-change:transform;filter:drop-shadow(0 0 4px currentColor);}
+@keyframes finaleFall{from{transform:translate3d(0,0,0) rotate(-15deg)}to{transform:translate3d(20px,110dvh,0) rotate(25deg)}}
+.finale-bye-in{animation:popin 1s cubic-bezier(.2,.9,.2,1) both;}
+.finale-beat{animation:finaleBeat 1.1s ease-in-out infinite;}
+@keyframes finaleBeat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(.95)}45%{transform:scale(1.12)}}
+.finale-glow{background:radial-gradient(circle,var(--paper),var(--rose-soft) 70%);animation:fade-in 2s ease-out both;}
+.bye-button{background:linear-gradient(135deg,var(--firework-pink),var(--primary));box-shadow:0 8px 30px color-mix(in oklab,var(--primary) 45%,transparent);animation:glow 2.4s ease-in-out infinite;transition:transform .25s,box-shadow .25s;}
+.bye-button:hover{transform:scale(1.07);box-shadow:0 10px 45px color-mix(in oklab,var(--primary) 70%,transparent);}
+.bye-ripple{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:color-mix(in oklab,var(--paper) 70%,transparent);animation:byeRipple .7s ease-out forwards;pointer-events:none;}
+@keyframes byeRipple{to{transform:scale(18);opacity:0}}
+
+/* Mobile & iOS hardening */
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+input,textarea,select{font-size:16px!important;}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.scrollbar-soft{-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.safe-top{padding-top:max(.75rem,env(safe-area-inset-top));}
+.safe-bottom{bottom:max(1rem,env(safe-area-inset-bottom));}
+@media (max-width:640px){.petal:nth-of-type(2n),.heart-float:nth-of-type(2n){display:none}}
+@media (max-height:500px) and (orientation:landscape){.chapter{min-height:auto!important}}
