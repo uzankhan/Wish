@@ -134,14 +134,13 @@ function Wish({onNext,chime}:{onNext:()=>void;chime:()=>void}){
       {Array.from({length:18},(_,i)=><span key={`h${i}`} className="wish-heart absolute text-primary" style={{left:`${(i*29+9)%96}%`,animationDelay:`-${i*.67}s`,animationDuration:`${5+i%4}s`}}>♥</span>)}
       {Array.from({length:32},(_,i)=><span key={`g${i}`} className="wish-glitter absolute text-gold" style={{left:`${(i*47+3)%98}%`,top:`${(i*37+9)%96}%`,animationDelay:`-${i*.23}s`}}>✦</span>)}
     </div>
-    <div className="relative z-10 mx-auto w-full max-w-4xl px-2">
+   <div className="relative z-10 mx-auto w-full max-w-4xl px-4 sm:px-2">
       <p className="mb-4 text-xs font-semibold uppercase tracking-[.25em] text-primary sm:text-sm">October 1 · the world celebrates you</p>
       <div className="wish-title-wrap relative mx-auto max-w-3xl">
         <span aria-hidden="true" className="wish-crown script block text-4xl text-gold sm:text-5xl">✦ ♥ ✦</span>
         <h2 className="wish-title script relative mx-auto mt-2 text-[clamp(2.8rem,9vw,6.5rem)] font-bold leading-[1.04] text-primary">Happy Birthday,<br/>My Januu! <CakeSlice aria-label="birthday cake" className="inline-block size-[.65em] align-baseline text-gold" strokeWidth={1.6}/></h2>
       </div>
-      <div className="mx-auto mt-7 max-w-2xl border-y border-primary/20 bg-paper px-4 py-5 shadow-lg sm:mt-9 sm:px-10 sm:py-7">
-        <p className="quote min-h-40 text-base leading-8 italic text-foreground sm:min-h-32 sm:text-xl">{shown.replace("💗", "")} {shown.includes("💗")&&<Heart className="inline-block size-5 fill-primary align-middle text-primary" aria-label="pink heart"/>}<span aria-hidden="true" className="animate-pulse text-primary">|</span></p>
+      <div className="mx-auto mt-5 max-w-2xl border-y border-primary/20 bg-paper px-5 py-5 shadow-lg sm:mt-9 sm:px-10 sm:py-7">        <p className="quote min-h-40 text-base leading-8 italic text-foreground sm:min-h-32 sm:text-xl">{shown.replace("💗", "")} {shown.includes("💗")&&<Heart className="inline-block size-5 fill-primary align-middle text-primary" aria-label="pink heart"/>}<span aria-hidden="true" className="animate-pulse text-primary">|</span></p>
       </div>
       <div aria-hidden="true" className="mt-5 text-xl text-primary">✦ &nbsp; ♡ &nbsp; ✦</div>
       <MagicButton onClick={onNext} className="mt-4">Make a wish <ArrowRight size={18}/></MagicButton>
