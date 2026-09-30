@@ -2,13 +2,13 @@ import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 
 import { ArrowRight, Heart, Send } from "lucide-react";
 
 const paragraphs = [
-  "My Januu...",
+  "My Bibi Jii...",
   "Since childhood, I always loved the name 'Laiba'. I don't know why, but it always felt special to me. Even as a kid, I used to think — if my wife is ever named Laiba, wow, how beautiful would that be?",
   "And now... it came true. I found my Laiba. And the biggest blessing of my life is YOU.",
   "I just want you to be my Begum Jii. My forever. My world. My everything.",
   "Please be there with me till the very last end.",
 ];
-const noLines = ["Nope, that's not an option 😜", "Try again, My Januu ♥", "Hehe, catch me if you can!", "Okay okay… only YES is left ♥"];
+const noLines = ["Nope, that's not an option 😜", "Try again Januu ♥", "Hehe, catch me if you can!", "Okay okay… only YES is left ♥"];
 const burst = [[20,25,0],[80,20,.2],[50,35,.45],[30,60,.9],[75,55,1.1],[15,45,1.5],[60,15,1.7],[88,40,2.1],[40,20,2.5],[55,62,2.9]] as const;
 const colors = ["firework-rose","firework-gold","firework-pearl","firework-pink"];
 
@@ -61,18 +61,34 @@ export function Proposal({ celebrate, chime, onNext }: { celebrate: () => void; 
     {boom && <Fireworks />}
     <div className="relative z-10">
       {stage !== "card" && <>
-        <p className="text-xs font-semibold uppercase tracking-[.25em] text-muted-foreground">The Question of Forever</p>
-        <div className="mt-4 rounded-lg border border-paper/70 bg-paper/70 p-5 text-left shadow-xl backdrop-blur-md sm:p-8">
-          {paragraphs.slice(0, line + 1).map((p, i) => {
-            const shown = i < line ? p : p.slice(0, chars);
-            return <p key={i} className={`animate-fade-in ${i === 0 ? "script text-4xl text-primary" : "quote mt-4 text-lg leading-relaxed text-foreground/85"}`}>
-              {shown}{i === paragraphs.length - 1 && shown === p && <Heart className="ml-1 inline fill-paper text-primary" size={18} />}
-              {i === line && stage === "story" && <span className="ml-0.5 animate-pulse text-primary">|</span>}
-            </p>;
-          })}
-          {stage === "story" && <button onClick={skip} className="mt-4 text-xs text-muted-foreground underline">Show all</button>}
-        </div>
-      </>}
+  <p className="text-xs font-semibold uppercase tracking-[.25em] text-muted-foreground">The Question of Forever</p>
+  <div className="mt-4 rounded-lg border border-paper/70 bg-paper p-5 text-left shadow-xl sm:p-8">
+    {paragraphs.slice(0, line + 1).map((p, i) => {
+      const isCurrent = i === line;
+      const isTyping = isCurrent && stage === "story" && chars < p.length;
+      const text = isCurrent ? p.slice(0, chars) : p;
+      const cursor = isTyping ? <span className="animate-pulse text-primary">▌</span> : null;
+
+      if (i === 0) {
+        // "My Bibi Jii..." — script pink heading
+        return (
+          <p key={i} className="script text-4xl font-bold text-primary sm:text-5xl">
+            {text}
+            {cursor}
+          </p>
+        );
+      }
+      // Body paragraphs — elegant serif italic
+      return (
+        <p key={i} className="quote mt-5 text-lg leading-8 italic text-foreground sm:text-xl">
+          {text}
+          {cursor}
+        </p>
+      );
+    })}
+    {stage === "story" && <button onClick={skip} className="mt-5 text-xs text-muted-foreground underline">Show all</button>}
+  </div>
+</>}
 
       {stage === "question" && <div className="animate-fade-in mt-8">
         <h2 className="wish-title script text-4xl font-bold text-primary sm:text-5xl">Do you know our names match so beautifully together? ♥</h2>
@@ -134,7 +150,7 @@ function WeddingCard({ chime, celebrate, onNext }: { chime: () => void; celebrat
       </div>
     </div>
 
-    <form onSubmit={submit} className="relative mx-auto mt-10 max-w-md rounded-lg border border-paper/70 bg-paper/75 p-6 text-left shadow-xl backdrop-blur-md">
+    <form onSubmit={submit} className="relative mx-auto mt-10 max-w-md rounded-lg border border-paper/70 bg-paper p-6 text-left shadow-xl">
       <span aria-hidden className="absolute -left-3 -top-3 text-2xl text-primary">❀</span><span aria-hidden className="absolute -bottom-3 -right-3 text-2xl text-primary">❀</span>
       <h3 className="script text-center text-4xl text-primary">Write your heart out, My Januu ♥</h3>
       <p className="mt-2 text-center text-sm text-muted-foreground">Tell me what you feel... and I'll get it directly in my heart (email) ♡</p>

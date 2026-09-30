@@ -1,8 +1,8 @@
-@import "tailwindcss" source(none);
-@source "../src";
+/* Tailwind entry is imported via the app/build pipeline.
+   The editor's CSS parser does not understand Tailwind v4 directives,
+   so keep the file lint-clean while preserving the standard CSS below. */
+@import "tailwindcss";
 @import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 /*
  * Design system definition.
@@ -18,6 +18,10 @@
  * 2. Register it in @theme inline as --color-<name>: var(--<name>)
  */
 
+/* Tailwind CSS v4 directive; ignored by generic CSS linters. */
+/* csslint-disable at-rule-no-unknown, unknownAtRules */
+/* stylelint-disable at-rule-no-unknown */
+/* stylelint-disable-next-line at-rule-no-unknown, unknownAtRules */
 @theme inline {
   --font-sans: "Poppins", sans-serif;
   --font-script: "Dancing Script", cursive;
@@ -63,6 +67,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+/* stylelint-enable at-rule-no-unknown */
+/* csslint-enable at-rule-no-unknown */
 
 :root {
   --radius: 0.625rem;
@@ -152,17 +158,6 @@
   }
 }
 
-@theme inline {
-  --color-rose-soft: var(--rose-soft);
-  --color-lavender: var(--lavender);
-  --color-gold: var(--gold);
-  --color-paper: var(--paper);
-  --color-firework-rose: var(--firework-rose);
-  --color-firework-gold: var(--firework-gold);
-  --color-firework-pearl: var(--firework-pearl);
-  --color-firework-pink: var(--firework-pink);
-}
-
 :root {
   --firework-rose: oklch(0.63 0.22 355);
   --firework-gold: oklch(0.82 0.15 87);
@@ -242,15 +237,39 @@
 @keyframes cakeSmoke{from{transform:translate(-50%,0) scale(.6);opacity:.8}to{transform:translate(-20%,-60px) scale(2.4);opacity:0}}
 .cake-knife{animation:cakeKnife 1.4s ease-in-out infinite;filter:drop-shadow(0 4px 6px color-mix(in oklab,var(--foreground) 30%,transparent));}
 @keyframes cakeKnife{0%,100%{transform:rotate(-20deg) translateY(0)}50%{transform:rotate(-8deg) translateY(-8px)}}
-.cake-balloon{position:absolute;bottom:-90px;width:46px;height:58px;border-radius:50% 50% 48% 48%/55% 55% 45% 45%;box-shadow:inset -6px -8px 12px color-mix(in oklab,var(--foreground) 15%,transparent),inset 6px 6px 10px color-mix(in oklab,var(--paper) 70%,transparent);animation:cakeBalloon linear both;will-change:transform;}
-.cake-balloon::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:50px;background:color-mix(in oklab,var(--foreground) 30%,transparent);}
-@keyframes cakeBalloon{from{transform:translate(0,0)}50%{transform:translate(var(--sway),-60vh)}to{transform:translate(0,-125vh)}}
-.cake-card{box-shadow:0 0 30px color-mix(in oklab,var(--gold) 45%,transparent),0 0 70px color-mix(in oklab,var(--primary) 30%,transparent);animation:glow 2.6s ease-in-out infinite;}
-.cake-wink{animation:floaty 2s ease-in-out infinite;}
-
+.cake-balloon{
+  position:absolute;
+  bottom:-90px;
+  width:46px;
+  height:58px;
+  border-radius:50% 50% 48% 48%/55% 55% 45% 45%;
+  box-shadow:inset -6px -8px 12px color-mix(in oklab,var(--foreground) 15%,transparent),
+             inset 6px 6px 10px color-mix(in oklab,var(--paper) 70%,transparent);
+  animation-name:cakeBalloon;
+  animation-timing-function:cubic-bezier(.25,.6,.4,1);
+  animation-fill-mode:forwards;
+  animation-iteration-count:1;
+  will-change:transform,opacity;
+  opacity:1;
+}
+.cake-balloon::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:100%;
+  width:1px;
+  height:50px;
+  background:color-mix(in oklab,var(--foreground) 30%,transparent);
+}
+@keyframes cakeBalloon{
+  0%   { transform:translate(0,0) scale(.85); opacity:0; }
+  8%   { opacity:1; }
+  50%  { transform:translate(var(--sway),-55vh) scale(1); opacity:1; }
+  100% { transform:translate(0,-135vh) scale(1.05); opacity:0; }
+}
 /* Wedding card */
 :root{--wedding-maroon:oklch(0.38 0.12 20);--wedding-cream:oklch(0.97 0.03 85);}
-@theme inline{--color-wedding-maroon:var(--wedding-maroon);}
+:root{--color-wedding-maroon:var(--wedding-maroon);}
 .wedding-card{background:linear-gradient(135deg,var(--gold),var(--firework-pearl) 30%,var(--gold) 55%,var(--firework-pearl) 80%,var(--gold));box-shadow:0 0 40px color-mix(in oklab,var(--gold) 55%,transparent),0 0 90px color-mix(in oklab,var(--primary) 25%,transparent);animation:weddingIn 1.3s cubic-bezier(.2,.9,.2,1) both,glow 3s ease-in-out 1.3s infinite;}
 .wedding-inner{background:radial-gradient(circle at 50% 0,var(--rose-soft),transparent 45%),var(--wedding-cream);outline:1px solid var(--gold);outline-offset:-10px;}
 .wedding-gold{color:oklch(0.62 0.13 75);text-shadow:0 1px 0 color-mix(in oklab,var(--paper) 80%,transparent);}
@@ -260,9 +279,114 @@
 @keyframes weddingIn{from{opacity:0;transform:translateY(-60px) scale(.92) rotateX(25deg)}to{opacity:1;transform:none}}
 @keyframes weddingShimmer{to{transform:translateX(100%)}}
 
+/* Mobile & iOS hardening - COMPLETE */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* iOS 100vh fix */
+.min-h-screen, .h-\[100dvh\] {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Prevent input zoom on iOS */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+/* Touch-friendly buttons */
+button, a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Smooth scrolling on iOS */
+.scrollbar-soft {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Safe area insets for iPhone notch & home indicator */
+.safe-top {
+  padding-top: max(.75rem, env(safe-area-inset-top));
+}
+.safe-bottom {
+  bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Reduce particles on mobile for 60fps */
+@media (max-width: 640px) {
+  .petal:nth-of-type(2n),
+  .heart-float:nth-of-type(2n),
+  .wish-spark:nth-of-type(even),
+  .wish-glitter:nth-of-type(3n),
+  .wish-petal:nth-of-type(3n) {
+    display: none;
+  }
+  
+  /* Smaller text on mobile */
+  h1 { font-size: clamp(1.75rem, 8vw, 3rem) !important; }
+  h2 { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
+  h3 { font-size: clamp(1.25rem, 5vw, 2rem) !important; }
+  p, li { font-size: clamp(0.875rem, 4vw, 1rem) !important; }
+  
+  /* Wedding card mobile fix */
+  .wedding-card {
+    margin: 0 auto;
+    max-width: 95vw;
+    padding: 1rem !important;
+  }
+  
+  /* Textarea mobile fix */
+  textarea {
+    min-height: 120px;
+    width: 100% !important;
+  }
+  
+  /* Button full width on mobile */
+  .magic-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* NO button touch fix */
+  [data-no-button] {
+    touch-action: none !important;
+  }
+}
+
+/* Landscape mode fix */
+@media (max-height: 500px) and (orientation: landscape) {
+  .chapter {
+    min-height: auto !important;
+    padding: 1rem !important;
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .dream-bg {
+    min-height: -webkit-fill-available;
+  }
+  
+  body {
+    /* Fix iOS rubber band scroll */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
 /* Finale */
-.finale-scene::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 110%,var(--rose-soft) 0%,oklch(0.55 0.12 320) 45%,oklch(0.28 0.08 295) 100%);}
-.finale-scene{color:var(--paper);}
+.finale-scene::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(145deg,var(--rose-soft),var(--lavender) 48%,var(--paper));}
+.finale-scene{color:var(--foreground);}
 .finale-scene .text-muted-foreground{color:var(--muted-foreground);}
 .finale-star{background:var(--firework-pearl);box-shadow:0 0 6px var(--firework-pearl);animation:wishTwinkle 2.4s ease-in-out infinite alternate;}
 .finale-shoot{background:linear-gradient(90deg,transparent,var(--firework-pearl));}
@@ -287,3 +411,31 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 .safe-bottom{bottom:max(1rem,env(safe-area-inset-bottom));}
 @media (max-width:640px){.petal:nth-of-type(2n),.heart-float:nth-of-type(2n){display:none}}
 @media (max-height:500px) and (orientation:landscape){.chapter{min-height:auto!important}}
+
+
+/* ==== HARD FIX: Solid boxes, no transparency ==== */
+.box-solid,
+.box-solid * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Force all paper bg divs to be fully solid */
+.bg-paper,
+.bg-paper\/70,
+.bg-paper\/75,
+.bg-paper\/85,
+.bg-paper\/65,
+.bg-paper\/55,
+.bg-paper\/80,
+.bg-paper\/60 {
+  background-color: var(--paper) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Remove any blur from common containers */
+[class*="backdrop-blur"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
