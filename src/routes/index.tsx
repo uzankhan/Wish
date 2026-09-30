@@ -4,12 +4,12 @@ import { ArrowLeft, ArrowRight, CakeSlice, Gift, Heart, Pause, Play, Volume2, Vo
 import { Proposal } from "../components/Proposal";
 import Finale from "../components/Finale";
 
-const floralWreath = new URL("../assets/romantic-floral-wreath.png", import.meta.url).href;
-const chocolateCake = new URL("../assets/chocolate-cake.png", import.meta.url).href;
-const memory1 = new URL("../assets/memories/memory-1.jpg", import.meta.url).href;
-const memory2 = new URL("../assets/memories/memory-2.jpg", import.meta.url).href;
-const memory3 = new URL("../assets/memories/memory-3.jpg", import.meta.url).href;
-const memory4 = new URL("../assets/memories/memory-4.jpg", import.meta.url).href;
+import floralWreath from "../assets/romantic-floral-wreath.png";
+import chocolateCake from "../assets/chocolate-cake.png";
+import memory1 from "../assets/memories/memory-1.jpg";
+import memory2 from "../assets/memories/memory-2.jpg";
+import memory3 from "../assets/memories/memory-3.jpg";
+import memory4 from "../assets/memories/memory-4.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
