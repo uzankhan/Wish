@@ -4,7 +4,7 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/Wish/",
+  base: "/",
   plugins: [
     tailwindcss(),   // <-- Ye add karo (agar nahi hai toh)
     tanstackStart({
