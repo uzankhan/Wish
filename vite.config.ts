@@ -1,15 +1,16 @@
 import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   base: "/Wish/",
   plugins: [
+    tailwindcss(),   // <-- Ye add karo (agar nahi hai toh)
     tanstackStart({
       prerender: {
-        enabled: true,        // <-- Static prerender ON karo
-        crawlLinks: true,     // <-- Saare links crawl karke prerender karo
-        autoSubfolderIndex: true,
+        enabled: true,
+        crawlLinks: true,
       },
     }),
     viteReact(),
