@@ -434,6 +434,100 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
   -webkit-backdrop-filter: none !important;
 }
 
+
+/* ===== MOBILE UX FIXES ===== */
+
+/* Heading ko notch se neeche lao */
+@media (max-width: 640px) {
+  /* Sabse pehle - screen top se safe distance */
+  .wish-scene,
+  .chapter {
+    padding-top: max(4rem, env(safe-area-inset-top) + 2rem) !important;
+  }
+  
+  /* Heading thodi choti karo mobile pe */
+  .wish-title {
+    font-size: clamp(2rem, 11vw, 3.5rem) !important;
+    line-height: 1.1 !important;
+    padding: 0 0.5rem;
+  }
+  
+  /* Text box ka padding barhao (edges se chipka na lage) */
+  .quote {
+    padding: 0 0.25rem;
+  }
+  
+  /* Text box mobile pe comfortable padding */
+  .wish-scene .mx-auto.border-y {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+  
+  /* Music player "Make a wish" button ko cover na kare */
+  .magic-button {
+    margin-bottom: 3.5rem !important;
+  }
+  
+  /* Netlify badge ko chupao (free plan pe dikhta hai) */
+  #netlify-badge,
+  [data-netlify-badge] {
+    display: none !important;
+  }
+}
+
+/* iPhone notch ke liye */
+@supports (padding: env(safe-area-inset-top)) {
+  .wish-scene::before {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  /* Har scene ke top pe safe area */
+  section.chapter {
+    padding-top: max(3rem, env(safe-area-inset-top) + 1.5rem);
+  }
+  
+  /* Bottom pe music player aur safe area */
+  .safe-bottom {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Particles kam karo mobile pe - performance boost */
+@media (max-width: 640px) {
+  .wish-petal:nth-of-type(n+15),
+  .wish-heart:nth-of-type(n+10),
+  .wish-glitter:nth-of-type(n+12),
+  .wish-spark:nth-of-type(n+8),
+  .petal:nth-of-type(n+6),
+  .heart-float:nth-of-type(n+5) {
+    display: none !important;
+  }
+}
+
+/* Reduce animation motion on mobile for smoothness */
+@media (max-width: 640px) {
+  .wish-firework,
+  .wish-cannon,
+  .shooting-star {
+    animation-duration: 3s !important;
+  }
+  
+  /* Disable backdrop-blur on mobile (heavy on GPU) */
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-sm {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Netlify badge hide - global */
+a[href*="netlify.com"][target="_blank"],
+iframe[src*="netlify"] {
+  display: none !important;
+}
 /* Remove any blur from common containers */
 [class*="backdrop-blur"] {
   backdrop-filter: none !important;
